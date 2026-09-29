@@ -14,7 +14,7 @@ export default function Hero() {
   useGSAP(
     () => {
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-      tl.from('.hero-scene', { autoAlpha: 0, scale: 1.08, duration: 2.2, ease: 'power2.out' })
+      tl.from('.hero-scene-intro', { autoAlpha: 0, scale: 1.08, duration: 2.2, ease: 'power2.out' })
         .from('.hero-word', { yPercent: 120, rotateX: -70, autoAlpha: 0, stagger: 0.14, duration: 1.4 }, 0.3)
         .from('.hero-sub', { y: 20, autoAlpha: 0, duration: 1 }, '-=0.9')
         .from('.hero-cta', { y: 20, autoAlpha: 0, duration: 0.9 }, '-=0.7')
@@ -26,7 +26,9 @@ export default function Hero() {
         ease: 'none',
         scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
       })
-      gsap.to('.hero-scene', {
+      // scroll parallax lives on the outer layer and the intro zoom on the inner
+      // one, so the two scale tweens never fight over the same transform
+      gsap.fromTo('.hero-scene', { yPercent: 0, scale: 1 }, {
         yPercent: 18,
         scale: 1.06,
         ease: 'none',
@@ -42,9 +44,11 @@ export default function Hero() {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,#7fb0ff_0%,#bcd4ff_40%,#e6eeff_70%,transparent_100%)] transition-opacity duration-700 dark:opacity-0" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,#1b2a8f_0%,#0d1250_45%,transparent_80%)] opacity-0 transition-opacity duration-700 dark:opacity-100" />
       <div className="hero-scene absolute inset-0">
-        <Suspense fallback={null}>
-          <HeroScene />
-        </Suspense>
+        <div className="hero-scene-intro absolute inset-0">
+          <Suspense fallback={null}>
+            <HeroScene />
+          </Suspense>
+        </div>
       </div>
       {/* fade into page */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-page/90" />
