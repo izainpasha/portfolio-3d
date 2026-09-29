@@ -7,7 +7,7 @@ import SectionHeading from './SectionHeading'
 function Rocket() {
   return (
     <svg viewBox="0 0 64 64" className="h-full w-full">
-      <path d="M32 4c10 8 14 20 12 34H20C18 24 22 12 32 4z" fill="#e8ecff" />
+      <path d="M32 4c10 8 14 20 12 34H20C18 24 22 12 32 4z" fill="#e8ecff" stroke="#1e2a78" strokeWidth="1.5" />
       <circle cx="32" cy="24" r="6" fill="#3b5bff" stroke="#0b1040" strokeWidth="2" />
       <path d="M20 38l-8 10 10-2zM44 38l8 10-10-2z" fill="#f43f5e" />
       <path d="M26 40h12l-2 8h-8z" fill="#94a3b8" />
@@ -81,7 +81,7 @@ export default function Experience() {
 
       <div className="timeline relative">
         {/* line */}
-        <div className="absolute left-4 top-0 h-full w-px bg-white/10 md:left-1/2" />
+        <div className="absolute left-4 top-0 h-full w-px bg-line/10 md:left-1/2" />
         <div className="timeline-progress absolute left-4 top-0 h-full w-px origin-top bg-gradient-to-b from-accent via-[#6d83ff] to-accent-2 shadow-[0_0_12px_#3dd6f5] md:left-1/2" />
 
         <ol className="space-y-14">
@@ -89,12 +89,12 @@ export default function Experience() {
             const side = i % 2 === 0 ? 'left' : 'right'
             return (
               <li key={job.role} data-side={side} className="timeline-item relative grid md:grid-cols-2 md:gap-16">
-                <span className="timeline-dot absolute left-4 top-6 z-10 grid size-8 -translate-x-1/2 place-items-center rounded-full border border-accent/60 bg-night-900 shadow-[0_0_20px_rgba(61,214,245,0.5)] md:left-1/2">
+                <span className="timeline-dot absolute left-4 top-6 z-10 grid size-8 -translate-x-1/2 place-items-center rounded-full border border-accent/60 bg-surface shadow-[0_0_20px_color-mix(in_srgb,var(--accent)_50%,transparent)] md:left-1/2">
                   <span className="size-2.5 rounded-full bg-accent" />
                 </span>
 
                 <div className={`pl-12 md:pl-0 ${side === 'left' ? 'md:order-1' : 'md:order-2'}`}>
-                  <article className="timeline-card rounded-xl bg-white p-6 text-slate-700 shadow-[0_20px_60px_-20px_rgba(61,91,255,0.6)]">
+                  <article className="timeline-card rounded-xl bg-white p-6 text-slate-700 shadow-[0_20px_60px_-20px_rgba(61,91,255,0.6)] ring-1 ring-indigo-100 dark:ring-0">
                     <p className="mb-2 text-xs font-medium text-[#3b5bff] md:hidden">{job.date}</p>
                     <h3 className="text-base font-semibold leading-snug text-[#2b3fd6]">{job.role}</h3>
                     <p className="mb-4 text-xs font-medium text-slate-500">{job.company}</p>

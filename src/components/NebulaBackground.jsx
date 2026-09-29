@@ -12,6 +12,7 @@ precision mediump float;
 uniform vec2 uRes;
 uniform float uTime;
 uniform float uScroll;
+uniform float uLight; // 0 = dark theme, 1 = light theme
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -39,9 +40,12 @@ void main() {
   float n = fbm(p * 1.6 + vec2(t, -t * 0.7) + fbm(p * 2.2 - t) * 0.8);
   float n2 = fbm(p * 1.2 + vec2(-t * 1.3, t) + 7.3);
 
-  vec3 col = vec3(0.022, 0.026, 0.10);
-  col = mix(col, vec3(0.08, 0.11, 0.40), smoothstep(0.45, 0.85, n) * 0.55);
-  col = mix(col, vec3(0.30, 0.09, 0.42), smoothstep(0.5, 0.9, n2) * 0.45);
+  vec3 base = mix(vec3(0.022, 0.026, 0.10), vec3(0.955, 0.96, 1.0), uLight);
+  vec3 blue = mix(vec3(0.08, 0.11, 0.40), vec3(0.80, 0.85, 1.0), uLight);
+  vec3 violet = mix(vec3(0.30, 0.09, 0.42), vec3(0.91, 0.84, 1.0), uLight);
+  vec3 col = base;
+  col = mix(col, blue, smoothstep(0.45, 0.85, n) * 0.55);
+  col = mix(col, violet, smoothstep(0.5, 0.9, n2) * 0.45);
 
   // stars (two layers, the near one moves more with scroll)
   for (int l = 0; l < 2; l++) {
@@ -53,10 +57,10 @@ void main() {
     vec2 off = (vec2(hash(id + 1.3), hash(id + 2.7)) - 0.5) * 0.6;
     float s = step(0.985, h) * smoothstep(0.13 + fl * 0.05, 0.0, length(f + off));
     s *= 0.55 + 0.45 * sin(uTime * (1.5 + h * 2.0) + h * 60.0);
-    col += s * vec3(0.8, 0.86, 1.0);
+    col += s * vec3(0.8, 0.86, 1.0) * (1.0 - uLight);
   }
 
-  col *= 1.0 - 0.4 * length(uv - 0.5);
+  col *= 1.0 - 0.4 * (1.0 - uLight * 0.85) * length(uv - 0.5);
   gl_FragColor = vec4(col, 1.0);
 }
 `
@@ -100,6 +104,10 @@ export default function NebulaBackground() {
     const uRes = gl.getUniformLocation(prog, 'uRes')
     const uTime = gl.getUniformLocation(prog, 'uTime')
     const uScroll = gl.getUniformLocation(prog, 'uScroll')
+    const uLight = gl.getUniformLocation(prog, 'uLight')
+    const root = document.documentElement
+    let light = root.dataset.theme === 'light' ? 1 : 0
+    let drawnLight = -1
 
     let raf = 0
     let scroll = 0
@@ -124,10 +132,14 @@ export default function NebulaBackground() {
       last = now
       const target = window.scrollY / window.innerHeight
       scroll += (target - scroll) * 0.15
-      if (LOW_POWER && Math.abs(scroll - drawnScroll) < 0.0005) return
+      // ease between palettes when the theme switches
+      light += ((root.dataset.theme === 'light' ? 1 : 0) - light) * 0.12
+      if (LOW_POWER && Math.abs(scroll - drawnScroll) < 0.0005 && Math.abs(light - drawnLight) < 0.002) return
       drawnScroll = scroll
+      drawnLight = light
       gl.uniform1f(uTime, LOW_POWER ? 0 : now / 1000)
       gl.uniform1f(uScroll, scroll)
+      gl.uniform1f(uLight, light)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
 

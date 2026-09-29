@@ -38,15 +38,15 @@ export default function Impact() {
       <div className="impact-grid grid gap-6 [perspective:1000px] sm:grid-cols-2 lg:grid-cols-4">
         {impact.map((m) => (
           <div key={m.label} className="impact-card glass-card flex flex-col p-7">
-            <div className="text-4xl font-semibold text-white md:text-5xl">
+            <div className="text-4xl font-semibold text-fg md:text-5xl">
               {m.prefix}
               <span className="impact-num" data-value={m.value}>
                 {m.value}
               </span>
               <span className="text-accent">{m.suffix}</span>
             </div>
-            <p className="mt-3 text-sm font-medium text-white">{m.label}</p>
-            <p className="mt-2 text-xs leading-6 text-indigo-100/60">{m.text}</p>
+            <p className="mt-3 text-sm font-medium text-fg">{m.label}</p>
+            <p className="mt-2 text-xs leading-6 text-fg-soft/60">{m.text}</p>
           </div>
         ))}
       </div>

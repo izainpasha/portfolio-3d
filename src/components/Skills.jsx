@@ -103,8 +103,8 @@ export default function Skills() {
         {skills.map((s) => (
           <article key={s.title} className="skill-card glass-card group p-7 [transform-style:preserve-3d]">
             <div className="skill-icon mx-auto mb-8 h-36 w-44 [transform:translateZ(40px)]">{icons[s.icon]}</div>
-            <h3 className="mb-4 text-xl font-medium leading-snug text-white [transform:translateZ(25px)]">{s.title}</h3>
-            <p className="text-sm leading-7 text-indigo-100/65">{s.text}</p>
+            <h3 className="mb-4 text-xl font-medium leading-snug text-fg [transform:translateZ(25px)]">{s.title}</h3>
+            <p className="text-sm leading-7 text-fg-soft/65">{s.text}</p>
             <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition duration-500 group-hover:opacity-100 bg-[radial-gradient(400px_circle_at_50%_0%,rgba(61,214,245,0.12),transparent_60%)]" />
           </article>
         ))}

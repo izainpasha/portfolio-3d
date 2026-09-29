@@ -3,23 +3,24 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { PerformanceMonitor, Sparkles, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import { LOW_POWER } from '../utils/perf'
+import { useTheme } from '../utils/theme'
 
 /* ------------------------------------------------------------------ */
 /* Moon                                                                */
 /* ------------------------------------------------------------------ */
-function useGlowTexture(inner = 'rgba(255,244,210,0.9)') {
+function useGlowTexture(inner = 'rgba(255,244,210,0.9)', mid = 'rgba(200,210,255,0.35)') {
   return useMemo(() => {
     const c = document.createElement('canvas')
     c.width = c.height = 128
     const ctx = c.getContext('2d')
     const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64)
     g.addColorStop(0, inner)
-    g.addColorStop(0.25, 'rgba(200,210,255,0.35)')
+    g.addColorStop(0.25, mid)
     g.addColorStop(1, 'rgba(120,140,255,0)')
     ctx.fillStyle = g
     ctx.fillRect(0, 0, 128, 128)
     return new THREE.CanvasTexture(c)
-  }, [inner])
+  }, [inner, mid])
 }
 
 const moonShader = {
@@ -43,6 +44,21 @@ const moonShader = {
       gl_FragColor = vec4(col,1.0);
     }
   `,
+}
+
+function Sun() {
+  const glow = useGlowTexture('rgba(255,236,170,1)', 'rgba(255,214,140,0.45)')
+  return (
+    <group position={[-15.5, 7.2, -18]}>
+      <mesh>
+        <sphereGeometry args={[1.2, 48, 48]} />
+        <meshBasicMaterial color="#fff1b8" fog={false} toneMapped={false} />
+      </mesh>
+      <sprite scale={[12, 12, 1]}>
+        <spriteMaterial map={glow} transparent depthWrite={false} blending={THREE.AdditiveBlending} fog={false} toneMapped={false} />
+      </sprite>
+    </group>
+  )
 }
 
 function Moon() {
@@ -162,20 +178,26 @@ const cityVertex = `
 `
 const cityFragment = `
   uniform sampler2D uWin;
+  uniform float uDay;
   varying vec2 vUv;
   varying vec3 vScale;
   varying vec3 vN;
   varying float vSeed;
   varying float vH;
   void main() {
-    vec3 col = mix(vec3(0.025, 0.03, 0.11), vec3(0.09, 0.11, 0.34), vH);
+    vec3 night = mix(vec3(0.025, 0.03, 0.11), vec3(0.09, 0.11, 0.34), vH);
+    vec3 day = mix(vec3(0.33, 0.40, 0.70), vec3(0.62, 0.70, 0.93), vH);
+    vec3 col = mix(night, day, uDay);
     if (abs(vN.y) < 0.5) {
       float w = abs(vN.x) > 0.5 ? vScale.z : vScale.x;
       vec2 cells = vec2(max(1.0, floor(w * 3.0)), floor(vScale.y * 3.2));
       // whole-cell offset into the window sheet so each face gets its own pattern
       float face = abs(vN.x) > 0.5 ? (vN.x > 0.0 ? 1.0 : 2.0) : (vN.z > 0.0 ? 3.0 : 4.0);
       vec2 offset = vec2(vSeed + face * 3.0, vSeed * 7.0 + face * 5.0);
-      col += texture2D(uWin, (vUv * cells + offset) / ${WIN_CELLS}.0).rgb * 0.95;
+      vec3 win = texture2D(uWin, (vUv * cells + offset) / ${WIN_CELLS}.0).rgb;
+      // night: lit windows glow; day: the same panes read as pale sky reflections
+      col += win * 0.95 * (1.0 - uDay);
+      col = mix(col, vec3(0.84, 0.91, 1.0), max(win.r, win.b) * 0.55 * uDay);
       // side faces facing away from the moon are darker
       col *= vN.x > 0.5 ? 0.7 : 1.0;
     } else {
@@ -185,7 +207,7 @@ const cityFragment = `
   }
 `
 
-function City({ count = LOW_POWER ? 40 : 55 }) {
+function City({ day, count = LOW_POWER ? 40 : 55 }) {
   const ref = useRef(null)
   const windows = useWindowTexture()
   const { geometry, buildings } = useMemo(() => {
@@ -212,12 +234,16 @@ function City({ count = LOW_POWER ? 40 : 55 }) {
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({
-        uniforms: { uWin: { value: windows } },
+        uniforms: { uWin: { value: windows }, uDay: { value: 0 } },
         vertexShader: cityVertex,
         fragmentShader: cityFragment,
       }),
     [windows],
   )
+
+  useEffect(() => {
+    material.uniforms.uDay.value = day ? 1 : 0
+  }, [day, material])
 
   useLayoutEffect(() => {
     const o = new THREE.Object3D()
@@ -378,6 +404,7 @@ export default function HeroScene() {
   const wrap = useRef(null)
   const [visible, setVisible] = useState(true)
   const [dpr, setDpr] = useState(LOW_POWER ? 1 : 1.5)
+  const day = useTheme() === 'light'
 
   // stop rendering when the hero is off-screen
   useEffect(() => {
@@ -401,17 +428,23 @@ export default function HeroScene() {
         {/* drop resolution if the frame rate sags */}
         <PerformanceMonitor onDecline={() => setDpr(1)} />
         {LOW_POWER && visible && <FrameLimiter fps={30} />}
-        <fog attach="fog" args={['#0b1040', 14, 40]} />
-        <ambientLight intensity={0.35} color="#8fa2ff" />
-        <directionalLight position={[-6, 6, 2]} intensity={1.6} color="#c9d4ff" />
-        <Stars radius={60} depth={30} count={LOW_POWER ? 1000 : 2000} factor={3} saturation={0.4} fade speed={0.6} />
-        <Moon />
+        <fog attach="fog" args={day ? ['#cddbff', 16, 44] : ['#0b1040', 14, 40]} />
+        <ambientLight intensity={day ? 1.1 : 0.35} color={day ? '#ffffff' : '#8fa2ff'} />
+        <directionalLight position={[-6, 6, 2]} intensity={day ? 2.4 : 1.6} color={day ? '#fff1d6' : '#c9d4ff'} />
+        {day ? (
+          <Sun />
+        ) : (
+          <>
+            <Stars radius={60} depth={30} count={LOW_POWER ? 1000 : 2000} factor={3} saturation={0.4} fade speed={0.6} />
+            <Moon />
+          </>
+        )}
         <Mountain position={[10, -1.6, -22]} scale={1.8} seed={1.3} />
         <Mountain position={[17, -2.2, -25]} scale={1.3} seed={4.1} />
         <Mountain position={[-17, -2.8, -26]} scale={1.1} seed={7.7} />
-        <City />
+        <City day={day} />
         <Workstation />
-        {!LOW_POWER && <Sparkles count={40} scale={[14, 6, 6]} position={[0, 0, 0]} size={2.5} speed={0.3} color="#9fe8ff" opacity={0.7} />}
+        {!LOW_POWER && !day && <Sparkles count={40} scale={[14, 6, 6]} position={[0, 0, 0]} size={2.5} speed={0.3} color="#9fe8ff" opacity={0.7} />}
         <Rig />
       </Canvas>
     </div>

@@ -1,5 +1,47 @@
 @import "tailwindcss";
 
+/* dark: variant follows the data-theme attribute set by utils/theme.js */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Theme tokens: light by default, overridden for dark */
+:root {
+  --page: #f4f5ff;
+  --surface: #ffffff;
+  --fg: #0b1030;
+  --fg-soft: #3b4270;
+  --line: #0b1030;
+  --accent: #0b8fb3;
+  --accent-2: #7c3aed;
+  --card-from: rgb(255 255 255 / 0.85);
+  --card-to: rgb(236 238 255 / 0.9);
+  --card-border: rgb(99 102 241 / 0.22);
+  --card-shadow: rgb(79 70 229 / 0.18);
+}
+
+:root[data-theme="dark"] {
+  --page: #05061a;
+  --surface: #0a0c2c;
+  --fg: #ffffff;
+  --fg-soft: #e0e7ff;
+  --line: #ffffff;
+  --accent: #3dd6f5;
+  --accent-2: #a476ff;
+  --card-from: rgb(58 38 120 / 0.55);
+  --card-to: rgb(8 10 36 / 0.9);
+  --card-border: rgb(120 130 255 / 0.25);
+  --card-shadow: rgb(30 40 160 / 0.6);
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-fg-soft: var(--fg-soft);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+}
+
 @theme {
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -7,15 +49,16 @@
   --color-night-950: #05061a;
   --color-night-900: #0a0c2c;
   --color-night-800: #111544;
-  --color-accent: #3dd6f5;
-  --color-accent-2: #a476ff;
   --color-glitch: #101010;
 }
 
 html {
-  background: var(--color-night-950);
-  color: #e6e8ff;
+  background: var(--page);
+  color: var(--fg);
   -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
 }
 
 body {
@@ -23,19 +66,21 @@ body {
 }
 
 ::selection {
-  background: rgb(61 214 245 / 0.35);
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 /* Glowing gradient card used across sections */
 .glass-card {
   position: relative;
   border-radius: 1rem;
-  background: linear-gradient(160deg, rgb(58 38 120 / 0.55), rgb(10 14 50 / 0.85) 55%, rgb(8 10 36 / 0.9));
-  border: 1px solid rgb(120 130 255 / 0.25);
-  box-shadow:
-    0 0 0 1px rgb(255 255 255 / 0.02) inset,
-    0 20px 60px -20px rgb(30 40 160 / 0.6);
+  background: linear-gradient(160deg, var(--card-from), var(--card-to));
+  border: 1px solid var(--card-border);
+  box-shadow: 0 20px 60px -20px var(--card-shadow);
   backdrop-filter: blur(6px);
+  transition:
+    background 0.5s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
 }
 
 .glass-card::before {
@@ -44,22 +89,15 @@ body {
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(160deg, rgb(164 118 255 / 0.7), transparent 40%, rgb(61 214 245 / 0.4));
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent-2) 70%, transparent), transparent 40%, color-mix(in srgb, var(--accent) 40%, transparent));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
 }
 
-.text-gradient {
-  background: linear-gradient(90deg, #fff, #b9c3ff 45%, #3dd6f5);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 .shiny {
-  background: linear-gradient(110deg, var(--color-accent) 35%, #fff 50%, var(--color-accent) 65%);
+  background: linear-gradient(110deg, var(--accent) 35%, var(--fg) 50%, var(--accent) 65%);
   background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;

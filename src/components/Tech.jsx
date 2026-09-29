@@ -64,16 +64,16 @@ export default function Tech() {
               <div className="transition duration-300 group-hover:-translate-y-2 group-hover:scale-110">
                 <TechTile t={t} />
               </div>
-              <span className="text-[11px] text-white/55 transition group-hover:text-white">{t.name}</span>
+              <span className="text-[11px] text-fg/55 transition group-hover:text-fg">{t.name}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="relative mt-20 overflow-hidden border-y border-white/5 py-5 [mask-image:linear-gradient(90deg,transparent,#000_15%,#000_85%,transparent)]">
+      <div className="relative mt-20 overflow-hidden border-y border-line/5 py-5 [mask-image:linear-gradient(90deg,transparent,#000_15%,#000_85%,transparent)]">
         <div ref={track} className="flex w-max gap-10 whitespace-nowrap">
           {[...tech, ...tech].map((t, i) => (
-            <span key={i} className="flex items-center gap-3 text-2xl font-medium text-white/20">
+            <span key={i} className="flex items-center gap-3 text-2xl font-medium text-fg/20">
               <span className="size-2 rounded-full" style={{ background: t.color }} />
               {t.name}
             </span>

@@ -37,18 +37,18 @@ export default function About() {
 
       <div className="grid items-center gap-12 md:grid-cols-[1.2fr_1fr]">
         <div>
-          <p className="reveal text-sm leading-7 text-indigo-100/75 md:text-base md:leading-8">{profile.about}</p>
+          <p className="reveal text-sm leading-7 text-fg-soft/75 md:text-base md:leading-8">{profile.about}</p>
 
           <div className="reveal mt-10 grid grid-cols-3 gap-4">
             {profile.stats.map((s) => (
               <div key={s.label} className="glass-card px-4 py-5 text-center">
-                <div className="text-3xl font-semibold text-white md:text-4xl">
+                <div className="text-3xl font-semibold text-fg md:text-4xl">
                   <span className="stat-num" data-value={s.value}>
                     {s.value}
                   </span>
                   <span className="text-accent">{s.suffix}</span>
                 </div>
-                <div className="mt-1 text-[11px] uppercase tracking-wider text-white/50">{s.label}</div>
+                <div className="mt-1 text-[11px] uppercase tracking-wider text-fg/50">{s.label}</div>
               </div>
             ))}
           </div>
@@ -57,8 +57,8 @@ export default function About() {
             {profile.education.map((e) => (
               <li key={e.degree} className="flex items-start justify-between gap-4 border-l-2 border-accent/60 pl-4">
                 <span>
-                  <span className="block text-sm font-medium text-white">{e.degree}</span>
-                  <span className="block text-xs text-white/50">{e.school}</span>
+                  <span className="block text-sm font-medium text-fg">{e.degree}</span>
+                  <span className="block text-xs text-fg/50">{e.school}</span>
                 </span>
                 <span className="shrink-0 text-xs text-accent">{e.years}</span>
               </li>
@@ -67,7 +67,7 @@ export default function About() {
         </div>
 
         <div
-          className="glitch-panel relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10"
+          className="glitch-panel relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-line/10"
           style={{ clipPath: 'inset(0% 0% 0% 0% round 24px)' }}
         >
           {profile.photo ? (
@@ -92,7 +92,7 @@ export default function About() {
             <LetterGlitch />
           )}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-glitch via-glitch/80 to-transparent px-6 pb-5 pt-16 text-center">
-            <div className="font-mono text-xs text-accent">&lt;developer /&gt;</div>
+            <div className="font-mono text-xs text-[#3dd6f5]">&lt;developer /&gt;</div>
             <div className="mt-1 text-lg font-medium text-white">{profile.name}</div>
           </div>
         </div>
