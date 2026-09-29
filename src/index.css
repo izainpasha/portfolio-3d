@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-night-950: #05061a;
+  --color-night-900: #0a0c2c;
+  --color-night-800: #111544;
+  --color-accent: #3dd6f5;
+  --color-accent-2: #a476ff;
+  --color-glitch: #101010;
+}
+
+html {
+  background: var(--color-night-950);
+  color: #e6e8ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgb(61 214 245 / 0.35);
+}
+
+/* Glowing gradient card used across sections */
+.glass-card {
+  position: relative;
+  border-radius: 1rem;
+  background: linear-gradient(160deg, rgb(58 38 120 / 0.55), rgb(10 14 50 / 0.85) 55%, rgb(8 10 36 / 0.9));
+  border: 1px solid rgb(120 130 255 / 0.25);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.02) inset,
+    0 20px 60px -20px rgb(30 40 160 / 0.6);
+  backdrop-filter: blur(6px);
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(160deg, rgb(164 118 255 / 0.7), transparent 40%, rgb(61 214 245 / 0.4));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #fff, #b9c3ff 45%, #3dd6f5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.shiny {
+  background: linear-gradient(110deg, var(--color-accent) 35%, #fff 50%, var(--color-accent) 65%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shiny { animation: none; }
+}
