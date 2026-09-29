@@ -70,19 +70,26 @@ export default function About() {
           className="glitch-panel relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10"
           style={{ clipPath: 'inset(0% 0% 0% 0% round 24px)' }}
         >
-          <LetterGlitch />
-          {profile.photo && (
-            <picture>
-              <source srcSet={`${import.meta.env.BASE_URL}${profile.photo}.webp`} type="image/webp" />
-              <img
-                src={`${import.meta.env.BASE_URL}${profile.photo}.jpg`}
-                alt={profile.name}
-                loading="lazy"
-                width="720"
-                height="1080"
-                className="portrait absolute inset-x-0 bottom-0 h-[92%] w-full object-cover object-top [mask-image:radial-gradient(ellipse_75%_85%_at_50%_45%,#000_55%,transparent_100%)]"
-              />
-            </picture>
+          {profile.photo ? (
+            <>
+              <picture>
+                <source srcSet={`${import.meta.env.BASE_URL}${profile.photo}.webp`} type="image/webp" />
+                <img
+                  src={`${import.meta.env.BASE_URL}${profile.photo}.jpg`}
+                  alt={profile.name}
+                  loading="lazy"
+                  width="720"
+                  height="1080"
+                  className="absolute inset-0 h-full w-full object-cover object-top"
+                />
+              </picture>
+              {/* glitch letters glow over the photo edge to edge, fading out around the face */}
+              <div className="pointer-events-none absolute inset-0 opacity-50 mix-blend-screen [mask-image:radial-gradient(ellipse_60%_55%_at_50%_38%,transparent_35%,#000_100%)]">
+                <LetterGlitch />
+              </div>
+            </>
+          ) : (
+            <LetterGlitch />
           )}
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-glitch via-glitch/80 to-transparent px-6 pb-5 pt-16 text-center">
             <div className="font-mono text-xs text-accent">&lt;developer /&gt;</div>
