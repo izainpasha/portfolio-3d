@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { LOW_POWER } from '../utils/perf'
 
 // Raw WebGL fullscreen fragment shader: drifting nebula + twinkling stars.
 const vert = `
@@ -25,7 +26,7 @@ float noise(vec2 p) {
 }
 float fbm(vec2 p) {
   float v = 0.0, a = 0.5;
-  for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.02; a *= 0.5; }
+  for (int i = 0; i < 4; i++) { v += a * noise(p); p *= 2.02; a *= 0.5; }
   return v;
 }
 
@@ -100,25 +101,34 @@ export default function NebulaBackground() {
     const uTime = gl.getUniformLocation(prog, 'uTime')
     const uScroll = gl.getUniformLocation(prog, 'uScroll')
 
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let raf = 0
     let scroll = 0
+    let last = 0
+    let drawnScroll = -1
+    // the nebula drifts slowly, so 30fps is plenty; low-power devices freeze
+    // the drift and only redraw when the scroll position changes
+    const frameMs = 1000 / 30
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio, 1)
+      const dpr = LOW_POWER ? 0.6 : Math.min(window.devicePixelRatio, 1)
       canvas.width = Math.floor(window.innerWidth * dpr)
       canvas.height = Math.floor(window.innerHeight * dpr)
       gl.viewport(0, 0, canvas.width, canvas.height)
       gl.uniform2f(uRes, canvas.width, canvas.height)
+      drawnScroll = -1
     }
 
     const render = (now) => {
+      raf = requestAnimationFrame(render)
+      if (now - last < frameMs) return
+      last = now
       const target = window.scrollY / window.innerHeight
-      scroll += (target - scroll) * 0.08
-      gl.uniform1f(uTime, reduced ? 0 : now / 1000)
+      scroll += (target - scroll) * 0.15
+      if (LOW_POWER && Math.abs(scroll - drawnScroll) < 0.0005) return
+      drawnScroll = scroll
+      gl.uniform1f(uTime, LOW_POWER ? 0 : now / 1000)
       gl.uniform1f(uScroll, scroll)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
-      raf = requestAnimationFrame(render)
     }
 
     const onVisibility = () => {

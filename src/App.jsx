@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import NebulaBackground from './components/NebulaBackground'
@@ -12,9 +12,12 @@ import Works from './components/Works'
 import Impact from './components/Impact'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import { initSmoothScroll } from './utils/smoothScroll'
 
 export default function App() {
   const root = useRef(null)
+
+  useEffect(() => initSmoothScroll(), [])
 
   // Generic scroll reveal for anything tagged .reveal
   useGSAP(

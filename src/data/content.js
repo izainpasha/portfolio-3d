@@ -4,6 +4,8 @@ export const profile = {
   name: 'Syed Zain Pasha',
   logoLines: ['Syed Zain', 'Pasha'],
   initials: 'SZ',
+  // file name in /public without extension (expects .webp and .jpg); set to null to hide
+  photo: 'profile',
   role: 'Full Stack Developer & Shopify Theme / App Specialist',
   location: 'Karachi, Pakistan',
   email: 'syedzain1999@gmail.com',

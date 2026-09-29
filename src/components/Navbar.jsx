@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { navLinks, profile } from '../data/content'
+import { scrollToId } from '../utils/smoothScroll'
 
 export default function Navbar() {
   const nav = useRef(null)
@@ -35,7 +36,7 @@ export default function Navbar() {
   const go = (id) => (e) => {
     e.preventDefault()
     setOpen(false)
-    gsap.to(window, { scrollTo: { y: `#${id}`, offsetY: 70 }, duration: 1.2, ease: 'power3.inOut' })
+    scrollToId(id)
   }
 
   return (

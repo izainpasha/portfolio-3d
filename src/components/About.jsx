@@ -67,15 +67,26 @@ export default function About() {
         </div>
 
         <div
-          className="glitch-panel relative mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-3xl border border-white/10"
+          className="glitch-panel relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10"
           style={{ clipPath: 'inset(0% 0% 0% 0% round 24px)' }}
         >
           <LetterGlitch />
-          <div className="absolute inset-0 grid place-items-center">
-            <div className="rounded-2xl border border-white/10 bg-glitch/80 px-6 py-4 text-center backdrop-blur-md">
-              <div className="font-mono text-xs text-accent">&lt;developer /&gt;</div>
-              <div className="mt-1 text-lg font-medium text-white">{profile.name}</div>
-            </div>
+          {profile.photo && (
+            <picture>
+              <source srcSet={`${import.meta.env.BASE_URL}${profile.photo}.webp`} type="image/webp" />
+              <img
+                src={`${import.meta.env.BASE_URL}${profile.photo}.jpg`}
+                alt={profile.name}
+                loading="lazy"
+                width="720"
+                height="1080"
+                className="portrait absolute inset-x-0 bottom-0 h-[92%] w-full object-cover object-top [mask-image:radial-gradient(ellipse_75%_85%_at_50%_45%,#000_55%,transparent_100%)]"
+              />
+            </picture>
+          )}
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-glitch via-glitch/80 to-transparent px-6 pb-5 pt-16 text-center">
+            <div className="font-mono text-xs text-accent">&lt;developer /&gt;</div>
+            <div className="mt-1 text-lg font-medium text-white">{profile.name}</div>
           </div>
         </div>
       </div>

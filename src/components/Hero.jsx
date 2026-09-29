@@ -2,6 +2,7 @@ import { lazy, Suspense, useRef } from 'react'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { profile } from '../data/content'
+import { scrollToId } from '../utils/smoothScroll'
 
 const HeroScene = lazy(() => import('../three/HeroScene'))
 
@@ -35,8 +36,6 @@ export default function Hero() {
     { scope: root },
   )
 
-  const scrollTo = (id) => gsap.to(window, { scrollTo: { y: `#${id}`, offsetY: 60 }, duration: 1.2, ease: 'power3.inOut' })
-
   return (
     <section ref={root} id="home" className="relative h-[100svh] min-h-[640px] overflow-hidden">
       {/* sky behind the transparent canvas */}
@@ -63,13 +62,13 @@ export default function Hero() {
         </p>
         <div className="hero-cta pointer-events-auto mt-8 flex gap-3">
           <button
-            onClick={() => scrollTo('works')}
+            onClick={() => scrollToId('works')}
             className="rounded-full bg-white px-6 py-2.5 text-sm font-medium text-night-900 transition hover:bg-accent"
           >
             View my work
           </button>
           <button
-            onClick={() => scrollTo('contact')}
+            onClick={() => scrollToId('contact')}
             className="rounded-full border border-white/30 px-6 py-2.5 text-sm font-medium text-white backdrop-blur transition hover:border-accent hover:text-accent"
           >
             Let's talk

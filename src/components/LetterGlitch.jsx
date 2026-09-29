@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { LOW_POWER } from '../utils/perf'
 
 // Canvas grid of glyphs that randomly swap and colour-blend — the #101010 panel effect.
 const DEFAULT_COLORS = ['#2b4bff', '#3dd6f5', '#a476ff', '#1a1f4d']
@@ -33,16 +34,19 @@ export default function LetterGlitch({
 
     const pick = (arr) => arr[(Math.random() * arr.length) | 0]
 
+    const drawCell = (i) => {
+      const c = cells[i]
+      const x = (i % cols) * charW
+      const y = ((i / cols) | 0) * charH
+      ctx.clearRect(x, y, charW, charH)
+      ctx.fillStyle = `rgb(${c.cur.r | 0},${c.cur.g | 0},${c.cur.b | 0})`
+      ctx.fillText(c.ch, x, y)
+    }
+
     const draw = () => {
-      const { width, height } = canvas.getBoundingClientRect()
-      ctx.clearRect(0, 0, width, height)
       ctx.font = `${fontSize}px "JetBrains Mono", monospace`
       ctx.textBaseline = 'top'
-      for (let i = 0; i < cells.length; i++) {
-        const c = cells[i]
-        ctx.fillStyle = `rgb(${c.cur.r | 0},${c.cur.g | 0},${c.cur.b | 0})`
-        ctx.fillText(c.ch, (i % cols) * charW, ((i / cols) | 0) * charH)
-      }
+      for (let i = 0; i < cells.length; i++) drawCell(i)
     }
 
     const setup = () => {
@@ -65,9 +69,9 @@ export default function LetterGlitch({
     const tick = (now) => {
       raf = requestAnimationFrame(tick)
       if (!visible) return
-      if (now - last >= speed) {
+      if (now - last >= (LOW_POWER ? speed * 2 : speed)) {
         last = now
-        const n = Math.max(1, Math.floor(cells.length * 0.05))
+        const n = Math.max(1, Math.floor(cells.length * (LOW_POWER ? 0.02 : 0.04)))
         for (let k = 0; k < n; k++) {
           const c = cells[(Math.random() * cells.length) | 0]
           if (!c) continue
@@ -77,14 +81,16 @@ export default function LetterGlitch({
           c.t = 0
         }
       }
-      for (const c of cells) {
+      // only repaint cells that are mid-transition
+      for (let i = 0; i < cells.length; i++) {
+        const c = cells[i]
         if (c.t >= 1) continue
         c.t = Math.min(1, c.t + 0.05)
         c.cur.r = c.from.r + (c.to.r - c.from.r) * c.t
         c.cur.g = c.from.g + (c.to.g - c.from.g) * c.t
         c.cur.b = c.from.b + (c.to.b - c.from.b) * c.t
+        drawCell(i)
       }
-      draw()
     }
 
     setup()

@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Sparkles, Stars } from '@react-three/drei'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { PerformanceMonitor, Sparkles, Stars } from '@react-three/drei'
 import * as THREE from 'three'
+import { LOW_POWER } from '../utils/perf'
 
 /* ------------------------------------------------------------------ */
 /* Moon                                                                */
@@ -130,7 +131,6 @@ const cityVertex = `
   }
 `
 const cityFragment = `
-  uniform float uTime;
   varying vec2 vUv;
   varying vec3 vScale;
   varying vec3 vN;
@@ -147,8 +147,6 @@ const cityFragment = `
       float win = step(0.28, f.x) * step(f.x, 0.72) * step(0.3, f.y) * step(f.y, 0.74);
       float r = hash(c + vSeed + (vN.x + vN.z * 2.0) * 7.0);
       float on = step(0.6, r);
-      float blink = step(0.5, fract(sin(floor(uTime * 0.3 + r * 20.0) * 12.9898 + r * 78.0) * 43758.5));
-      on *= mix(1.0, blink, step(0.9, r));
       vec3 lc = mix(vec3(1.0, 0.8, 0.45), vec3(0.45, 0.85, 1.0), step(0.78, hash(c * 1.7 + vSeed)));
       col = mix(col, lc, win * on * 0.95);
       // side faces facing away from the moon are darker
@@ -160,7 +158,7 @@ const cityFragment = `
   }
 `
 
-function City({ count = 70 }) {
+function City({ count = LOW_POWER ? 40 : 55 }) {
   const ref = useRef(null)
   const { geometry, buildings } = useMemo(() => {
     const geometry = new THREE.BoxGeometry(1, 1, 1)
@@ -183,7 +181,6 @@ function City({ count = 70 }) {
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({
-        uniforms: { uTime: { value: 0 } },
         vertexShader: cityVertex,
         fragmentShader: cityFragment,
       }),
@@ -200,10 +197,6 @@ function City({ count = 70 }) {
     })
     ref.current.instanceMatrix.needsUpdate = true
   }, [buildings])
-
-  useFrame((state) => {
-    material.uniforms.uTime.value = state.clock.elapsedTime
-  })
 
   return <instancedMesh ref={ref} args={[geometry, material, count]} frustumCulled={false} />
 }
@@ -339,9 +332,20 @@ function Rig() {
   return null
 }
 
+// Low-power mode: render on demand at a capped frame rate instead of every vsync.
+function FrameLimiter({ fps }) {
+  const invalidate = useThree((s) => s.invalidate)
+  useEffect(() => {
+    const id = setInterval(invalidate, 1000 / fps)
+    return () => clearInterval(id)
+  }, [fps, invalidate])
+  return null
+}
+
 export default function HeroScene() {
   const wrap = useRef(null)
   const [visible, setVisible] = useState(true)
+  const [dpr, setDpr] = useState(LOW_POWER ? 1 : 1.5)
 
   // stop rendering when the hero is off-screen
   useEffect(() => {
@@ -353,24 +357,27 @@ export default function HeroScene() {
   return (
     <div ref={wrap} className="absolute inset-0">
       <Canvas
-        frameloop={visible ? 'always' : 'never'}
-        dpr={[1, 1.75]}
+        frameloop={!visible ? 'never' : LOW_POWER ? 'demand' : 'always'}
+        dpr={dpr}
         camera={{ position: [0, 0.8, 9], fov: 50 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: !LOW_POWER, alpha: true, powerPreference: 'high-performance' }}
         eventSource={document.getElementById('root')}
         eventPrefix="client"
       >
+        {/* drop resolution if the frame rate sags */}
+        <PerformanceMonitor onDecline={() => setDpr(1)} />
+        {LOW_POWER && visible && <FrameLimiter fps={30} />}
         <fog attach="fog" args={['#0b1040', 14, 40]} />
         <ambientLight intensity={0.35} color="#8fa2ff" />
         <directionalLight position={[-6, 6, 2]} intensity={1.6} color="#c9d4ff" />
-        <Stars radius={60} depth={30} count={2500} factor={3} saturation={0.4} fade speed={0.6} />
+        <Stars radius={60} depth={30} count={LOW_POWER ? 1000 : 2000} factor={3} saturation={0.4} fade speed={0.6} />
         <Moon />
         <Mountain position={[10, -1.6, -22]} scale={1.8} seed={1.3} />
         <Mountain position={[17, -2.2, -25]} scale={1.3} seed={4.1} />
         <Mountain position={[-17, -2.8, -26]} scale={1.1} seed={7.7} />
         <City />
         <Workstation />
-        <Sparkles count={60} scale={[14, 6, 6]} position={[0, 0, 0]} size={2.5} speed={0.3} color="#9fe8ff" opacity={0.7} />
+        {!LOW_POWER && <Sparkles count={40} scale={[14, 6, 6]} position={[0, 0, 0]} size={2.5} speed={0.3} color="#9fe8ff" opacity={0.7} />}
         <Rig />
       </Canvas>
     </div>
