@@ -9,7 +9,7 @@ import Skills from './components/Skills'
 import Experience from './components/Experience'
 import Tech from './components/Tech'
 import Works from './components/Works'
-import Testimonials from './components/Testimonials'
+import Impact from './components/Impact'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 
@@ -46,7 +46,7 @@ export default function App() {
         <Experience />
         <Tech />
         <Works />
-        <Testimonials />
+        <Impact />
         <Contact />
       </main>
       <Footer />

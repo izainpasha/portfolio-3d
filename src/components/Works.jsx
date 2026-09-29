@@ -29,6 +29,11 @@ function MockShot({ w }) {
   )
 }
 
+// Link when a project URL is set, plain card otherwise.
+function Card({ href, ...props }) {
+  return href ? <a href={href} target="_blank" rel="noreferrer" {...props} /> : <div {...props} />
+}
+
 export default function Works() {
   const root = useRef(null)
 
@@ -48,11 +53,11 @@ export default function Works() {
 
   return (
     <section ref={root} id="works" className="relative mx-auto max-w-6xl px-4 py-28 sm:px-6">
-      <SectionHeading eyebrow="My works" title="Completed Projects" />
+      <SectionHeading eyebrow="What I build" title="Shopify & eCommerce Work" />
       <div className="works-grid grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {works.map((w) => (
           <div key={w.title} className="work-card">
-            <a
+            <Card
               href={w.href}
               className="group block h-full overflow-hidden rounded-2xl bg-white text-slate-700 shadow-[0_20px_60px_-25px_rgba(61,91,255,0.7)] transition duration-500 hover:-translate-y-2 hover:shadow-[0_30px_80px_-20px_rgba(61,214,245,0.6)]"
             >
@@ -68,7 +73,7 @@ export default function Works() {
                   ))}
                 </div>
               </div>
-            </a>
+            </Card>
           </div>
         ))}
       </div>

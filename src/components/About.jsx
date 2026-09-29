@@ -52,6 +52,18 @@ export default function About() {
               </div>
             ))}
           </div>
+
+          <ul className="reveal mt-8 space-y-3">
+            {profile.education.map((e) => (
+              <li key={e.degree} className="flex items-start justify-between gap-4 border-l-2 border-accent/60 pl-4">
+                <span>
+                  <span className="block text-sm font-medium text-white">{e.degree}</span>
+                  <span className="block text-xs text-white/50">{e.school}</span>
+                </span>
+                <span className="shrink-0 text-xs text-accent">{e.years}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div

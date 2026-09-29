@@ -1,22 +1,24 @@
 // Edit this file to personalise the whole site.
 
 export const profile = {
-  name: 'Alex Rivera',
-  initials: 'AR',
-  role: 'Web Designer & Developer',
-  email: 'hello@example.com',
+  name: 'Syed Zain Pasha',
+  logoLines: ['Syed Zain', 'Pasha'],
+  initials: 'SZ',
+  role: 'Full Stack Developer & Shopify Theme / App Specialist',
+  location: 'Karachi, Pakistan',
+  email: 'syedzain1999@gmail.com',
   about:
-    'An experienced Web Designer and Developer with a versatile background spanning industries such as IT/BPO, Digital Design Services and White Label Services. Proficient in platforms like WordPress, Shopify and WooCommerce — handling everything from setup and design to development and deployment. Also skilled in Graphic Design, Digital Marketing and Search Engine Optimization.',
+    'Full Stack Developer with 5+ years of experience building and shipping custom eCommerce solutions, specialising in Shopify custom theme and app development. I grew at Beecreative from Junior CMS Developer to Senior CMS Developer, Team Lead and Production Manager, delivering 300+ Shopify and eCommerce projects across multiple industries. I work in JavaScript, Liquid, HTML/CSS, Node.js and React, with hands-on experience in the Shopify Admin and Storefront APIs, and I turn Figma and Adobe XD designs into fast, conversion-focused stores. Today I lead two cross-functional development and SEO teams of 13+ developers and project managers.',
   stats: [
-    { value: 8, suffix: '+', label: 'Years experience' },
-    { value: 120, suffix: '+', label: 'Projects shipped' },
-    { value: 60, suffix: '+', label: 'Happy clients' },
+    { value: 5, suffix: '+', label: 'Years experience' },
+    { value: 300, suffix: '+', label: 'Projects delivered' },
+    { value: 13, suffix: '+', label: 'Team members led' },
   ],
-  socials: [
-    { label: 'GitHub', href: 'https://github.com' },
-    { label: 'LinkedIn', href: 'https://linkedin.com' },
-    { label: 'Dribbble', href: 'https://dribbble.com' },
+  education: [
+    { degree: 'Bachelor of Computer Science', school: 'Sir Syed University of Engineering & Technology', years: '2018 — 2022' },
+    { degree: 'Intermediate (HSC)', school: 'Govt. Degree College Gulshan Block 7', years: '2015 — 2017' },
   ],
+  socials: [{ label: 'GitHub', href: 'https://github.com/izainpasha' }],
 }
 
 export const navLinks = [
@@ -24,161 +26,154 @@ export const navLinks = [
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'works', label: 'Works' },
-  { id: 'testimonials', label: 'Testimonials' },
+  { id: 'impact', label: 'Impact' },
 ]
 
 export const skills = [
   {
     icon: 'design',
-    title: 'Graphic Design & Web Design',
-    text: 'Envisions and carries out visual design projects in Graphic and Web Design, primarily using Adobe Photoshop, Illustrator, Adobe XD, Figma and other relevant tools as necessary.',
+    title: 'Shopify Custom Theme Development',
+    text: 'Custom-coded Online Store 2.0 themes built from scratch with Liquid, sections & blocks, templates, metafields and metaobjects — pixel-perfect conversions of Figma and Adobe XD designs, tuned for Core Web Vitals and conversion.',
   },
   {
     icon: 'code',
-    title: 'Front-End & Web Development',
-    text: 'Expert in front-end and web development using HTML, CSS, JavaScript, WordPress and Shopify. Recently building interactive projects with React, Three.js, GSAP and Tailwind CSS.',
+    title: 'Shopify Apps & Full Stack',
+    text: 'Custom and public Shopify apps with React, Remix, Node.js, Polaris and App Bridge. Admin API (GraphQL & REST), Storefront API, webhooks, OAuth, Theme App Extensions, and data with MySQL, PostgreSQL and Prisma.',
   },
   {
     icon: 'seo',
-    title: 'Search Engine Optimization & SMM',
-    text: 'Proficient in on-page SEO, website analysis and optimization. Also well-versed in Social Media Marketing and capable of handling various ad-hoc digital marketing tasks.',
+    title: 'Delivery & Team Leadership',
+    text: 'Leading development and SEO teams through Agile / Scrum — sprint planning, code review, QA and release management, risk and timeline control, and clear client communication from scoping to post-launch support.',
   },
 ]
 
 export const experience = [
   {
-    role: 'WordPress & Web Developer | Graphic & Web Designer | SEO',
-    company: 'Independent Contractor (Home-based)',
-    date: 'Oct 2019 — Present',
+    role: 'Production Manager (Development & Service Delivery)',
+    company: 'Beecreative.pk',
+    date: 'Feb 2025 — Present',
     points: [
-      'Web development using WordPress and different themes such as Astra, Divi, Newspaper, Elementor and more.',
-      'E-commerce development using WooCommerce and Shopify with themes customized to brand requirements.',
-      'Front-end development using HTML5, CSS3 and JavaScript; recently React, GSAP and Three.js.',
-      'On-page SEO, website analysis and speed optimization.',
+      'Lead 2 cross-functional development and SEO teams (13+ developers and project managers), owning delivery from requirement gathering and technical scoping through QA, launch and post-launch support.',
+      'Act as the technical bridge between clients, sales and engineering, translating business requirements into scalable Shopify and eCommerce solutions.',
+      'Plan sprints, allocate resources and manage risk and timelines across concurrent projects, keeping delivery predictable and high quality.',
+      'Partner with sales on upsell and recurring-revenue opportunities, improving customer satisfaction and retention.',
     ],
   },
   {
-    role: 'Front-End Web Developer',
-    company: 'Affinity X',
-    date: 'Sep 2017 — Jan 2019',
+    role: 'Team Lead',
+    company: 'Beecreative.pk',
+    date: 'Mar 2024 — Feb 2025',
     points: [
-      'Designed and built responsive websites mainly using WordPress and CMS templating themes.',
-      'Updated layouts of websites mainly using HTML, CSS and jQuery.',
-      'Used Adobe Photoshop for manipulating, editing, sizing and enhancement of graphic assets.',
+      'Led a team of CMS developers on Shopify theme and app builds, setting technical standards, assigning tasks and reviewing code before release.',
+      'Coordinated with designers and project managers to meet tight deadlines while keeping output pixel-perfect and performant.',
+      'Guided developers on Liquid, JavaScript and Shopify best practices, raising overall code quality and delivery speed.',
     ],
   },
   {
-    role: 'IT Technical Recruiter',
-    company: 'Remote Staffing Ltd.',
-    date: 'Aug 2016 — Sep 2017',
+    role: 'Senior CMS Developer',
+    company: 'Beecreative.pk',
+    date: 'Jun 2022 — Mar 2024',
     points: [
-      'Reviewed and understood technical job requirements, technology stack and technical skills.',
-      'Sourced candidates via job boards, social media and professional networks.',
-      'Screened, interviewed and evaluated candidates for technical positions.',
+      'Designed and developed custom-coded Shopify themes from scratch using Liquid, sections, templates and metafields.',
+      'Built custom Shopify apps that extended store functionality, integrating the Admin and Storefront APIs and third-party services.',
+      'Converted Figma and Adobe XD designs into pixel-perfect, responsive stores optimised for performance, UX and conversion.',
+      'Owned complex client requirements end to end, working closely with designers and project managers.',
     ],
   },
   {
-    role: 'IT Helpdesk / Technical Consultant',
-    company: 'Global Services Co.',
-    date: 'May 2015 — May 2016',
+    role: 'Junior CMS Developer',
+    company: 'Beecreative.pk',
+    date: 'Mar 2021 — Jun 2022',
     points: [
-      'Provided technical support for Microsoft Windows operating systems and Microsoft Office.',
-      'Performed remote desktop troubleshooting and PC setup.',
-      'Accurately processed and documented all transactions using ticketing tools.',
+      'Built and customised Shopify storefronts with HTML, CSS, JavaScript and Liquid from Figma and Adobe XD designs.',
+      'Implemented sections, templates and metafield-driven content, and handled client change requests and bug fixes.',
+      'Tested across browsers and devices to ensure consistent, high-quality delivery.',
+    ],
+  },
+  {
+    role: 'Project Manager (Service Delivery)',
+    company: 'WeBytez Technologies',
+    date: 'Oct 2019 — Dec 2020',
+    points: [
+      'Managed client communication, requirement gathering and project execution for web and digital products.',
+      'Coordinated designers and developers for smooth, on-time delivery, translating client needs into clear technical tasks.',
+      'Ran client calls, demos and progress updates, building long-term relationships and driving digital upsell opportunities.',
     ],
   },
 ]
 
 // abbr is what renders inside the tile; color is the brand-ish tint.
 export const tech = [
-  { name: 'HTML5', abbr: '5', color: '#e34f26' },
-  { name: 'CSS3', abbr: '3', color: '#2965f1' },
   { name: 'JavaScript', abbr: 'JS', color: '#f7df1e', dark: true },
+  { name: 'TypeScript', abbr: 'TS', color: '#3178c6' },
+  { name: 'Liquid', abbr: '{%}', color: '#95bf47', dark: true },
+  { name: 'HTML5', abbr: '5', color: '#e34f26' },
+  { name: 'CSS / SCSS', abbr: 'Sass', color: '#cc6699' },
+  { name: 'Node.js', abbr: 'N', color: '#5fa04e' },
   { name: 'React', abbr: '⚛', color: '#61dafb', dark: true },
-  { name: 'Three.js', abbr: '3D', color: '#ffffff', dark: true },
-  { name: 'GSAP', abbr: 'GS', color: '#88ce02', dark: true },
-  { name: 'Tailwind', abbr: 'TW', color: '#38bdf8', dark: true },
-  { name: 'WordPress', abbr: 'W', color: '#21759b' },
+  { name: 'Remix', abbr: 'R', color: '#e8f2ff', dark: true },
+  { name: 'Express.js', abbr: 'ex', color: '#444444' },
   { name: 'Shopify', abbr: 'S', color: '#95bf47', dark: true },
-  { name: 'WooCommerce', abbr: 'Woo', color: '#7f54b3' },
+  { name: 'Polaris', abbr: 'P', color: '#008060' },
+  { name: 'GraphQL', abbr: 'GQL', color: '#e10098' },
+  { name: 'MySQL', abbr: 'SQL', color: '#00758f' },
+  { name: 'PostgreSQL', abbr: 'PG', color: '#336791' },
+  { name: 'Prisma', abbr: '▲', color: '#2d3748' },
+  { name: 'Git / GitHub', abbr: 'GH', color: '#f05032' },
   { name: 'Figma', abbr: 'F', color: '#f24e1e' },
-  { name: 'Photoshop', abbr: 'Ps', color: '#31a8ff', bg: '#001e36' },
-  { name: 'Illustrator', abbr: 'Ai', color: '#ff9a00', bg: '#330000' },
   { name: 'Adobe XD', abbr: 'Xd', color: '#ff61f6', bg: '#470137' },
-  { name: 'Bootstrap', abbr: 'B', color: '#7952b3' },
-  { name: 'SEO', abbr: 'SEO', color: '#3b5bff' },
-  { name: 'Notion', abbr: 'N', color: '#ffffff', dark: true },
-  { name: 'GitHub', abbr: 'GH', color: '#24292e' },
 ]
 
+// Types of work from the CV. Add real client projects (with href + screenshot) when ready.
 export const works = [
   {
-    title: 'Designs By Lita',
-    text: 'An e-commerce website for graphic design and print products, built from scratch using Shopify with custom sections.',
-    tags: ['Shopify', 'Liquid', 'Figma'],
-    gradient: 'from-rose-200 via-amber-100 to-white',
+    title: 'Custom Shopify Themes',
+    text: 'Online Store 2.0 themes coded from scratch — sections & blocks, templates, metafields and metaobjects, built for speed and conversion.',
+    tags: ['Liquid', 'OS 2.0', 'Metafields'],
+    gradient: 'from-lime-100 via-emerald-100 to-white',
     dark: false,
-    href: '#',
   },
   {
-    title: 'My Personal Website',
-    text: 'An interactive portfolio developed with React, Three.js, GSAP and Tailwind CSS — the site you are looking at.',
-    tags: ['React', 'Three.js', 'GSAP'],
+    title: 'Custom Shopify Apps',
+    text: 'Embedded apps that extend store functionality with the Admin & Storefront APIs, webhooks and third-party integrations.',
+    tags: ['Remix', 'Polaris', 'Admin API'],
     gradient: 'from-indigo-900 via-blue-800 to-violet-900',
     dark: true,
-    href: '#',
   },
   {
-    title: 'NLOWE',
-    text: 'A marketing website for a fashion brand, designed in Figma and developed on WordPress with Elementor.',
-    tags: ['WordPress', 'Elementor'],
+    title: 'Figma / XD to Storefront',
+    text: 'Pixel-perfect, responsive, mobile-first stores converted from Figma and Adobe XD designs and tested across browsers.',
+    tags: ['Figma', 'Adobe XD', 'Responsive'],
     gradient: 'from-pink-100 via-rose-200 to-red-300',
     dark: false,
-    href: '#',
   },
   {
-    title: 'Travel Journal',
-    text: 'A content-driven travel blog with custom post types, fast image loading and on-page SEO optimisation.',
-    tags: ['WordPress', 'SEO'],
+    title: 'Theme App Extensions',
+    text: 'App blocks and embeds that merchants drop into any theme — no code edits needed, clean uninstall.',
+    tags: ['Shopify CLI', 'App Blocks'],
     gradient: 'from-sky-200 via-cyan-100 to-emerald-200',
     dark: false,
-    href: '#',
   },
   {
-    title: 'Cafe Crema',
-    text: 'Landing page for a specialty coffee shop with online menu, reservations and Instagram feed.',
-    tags: ['HTML', 'CSS', 'JS'],
+    title: 'Performance Optimisation',
+    text: 'Core Web Vitals and Lighthouse improvements for existing stores — leaner assets, fewer scripts, faster pages.',
+    tags: ['Core Web Vitals', 'Lighthouse'],
     gradient: 'from-amber-200 via-orange-100 to-stone-200',
     dark: false,
-    href: '#',
   },
   {
-    title: 'SaaS Dashboard',
-    text: 'Marketing site and dashboard UI kit for an analytics start-up, with animated charts and dark mode.',
-    tags: ['React', 'Tailwind'],
+    title: 'APIs & Integrations',
+    text: 'RESTful and GraphQL services with Node.js and Express, backed by MySQL, PostgreSQL and Prisma.',
+    tags: ['Node.js', 'GraphQL', 'Prisma'],
     gradient: 'from-slate-800 via-indigo-900 to-sky-900',
     dark: true,
-    href: '#',
   },
 ]
 
-export const testimonials = [
-  {
-    quote:
-      'Alex took our rough ideas and turned them into a fast, beautiful store. Communication was excellent from start to finish.',
-    name: 'Maria Santos',
-    title: 'Founder, Designs By Lita',
-  },
-  {
-    quote:
-      'Our organic traffic doubled within four months of the redesign. Genuinely the best freelancer we have worked with.',
-    name: 'James Whitaker',
-    title: 'Marketing Lead, NLOWE',
-  },
-  {
-    quote:
-      'Pixel-perfect execution and animations that make the product feel premium. We keep coming back for new projects.',
-    name: 'Priya Nair',
-    title: 'Product Manager, Metricly',
-  },
+// Figures from the CV.
+export const impact = [
+  { value: 300, suffix: '+', label: 'Shopify & eCommerce projects', text: 'Delivered across multiple industries, from custom themes to custom apps.' },
+  { value: 30, prefix: '25–', suffix: '%', label: 'Better on-time delivery', text: 'Through sprint planning, prioritisation and workflow optimisation.' },
+  { value: 25, suffix: '%', label: 'Repeat clients', text: 'Supported by upsell initiatives and long-term client relationships.' },
+  { value: 13, suffix: '+', label: 'Developers & PMs led', text: 'Across two cross-functional development and SEO teams.' },
 ]

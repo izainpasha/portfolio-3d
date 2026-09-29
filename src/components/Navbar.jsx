@@ -53,7 +53,7 @@ export default function Navbar() {
             {profile.initials}
           </span>
           <span className="text-xs font-semibold uppercase leading-tight tracking-wide text-white">
-            {profile.name.split(' ').map((p) => (
+            {profile.logoLines.map((p) => (
               <span key={p} className="block">
                 {p}
               </span>

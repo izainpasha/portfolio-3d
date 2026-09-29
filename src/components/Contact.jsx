@@ -46,7 +46,7 @@ export default function Contact() {
         <div className="relative hidden min-h-80 md:block">
           <LetterGlitch colors={GLITCH_COLORS} speed={33} />
           <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end bg-gradient-to-t from-glitch via-glitch/90 to-transparent p-8 pt-24">
-            <p className="font-mono text-xs text-accent-2">// available for freelance</p>
+            <p className="font-mono text-xs text-accent-2">// based in Karachi, Pakistan</p>
             <p className="mt-2 text-2xl font-medium text-white">Have a project in mind?</p>
             <a href={`mailto:${profile.email}`} className="mt-2 text-sm text-white/70 underline-offset-4 hover:text-accent hover:underline">
               {profile.email}

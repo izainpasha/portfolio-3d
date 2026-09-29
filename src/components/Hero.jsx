@@ -58,8 +58,8 @@ export default function Hero() {
           ))}
         </h1>
         <p className="hero-sub mt-4 max-w-xl text-sm text-indigo-100/80 sm:text-base">
-          Hi, I'm <span className="font-medium text-accent">{profile.name}</span> — {profile.role} crafting immersive,
-          high-performance web experiences.
+          Hi, I'm <span className="font-medium text-accent">{profile.name}</span> — {profile.role} building
+          fast, conversion-focused eCommerce experiences.
         </p>
         <div className="hero-cta pointer-events-auto mt-8 flex gap-3">
           <button
