@@ -112,8 +112,38 @@ function Mountain({ position, scale = 1, seed = 1 }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Instanced city with procedural lit windows                          */
+/* Instanced city with pre-baked lit windows                           */
 /* ------------------------------------------------------------------ */
+// Windows come from one mipmapped texture drawn once at load, so they stay
+// perfectly still: no per-pixel maths that can shimmer or flicker.
+const WIN_CELLS = 16
+
+function useWindowTexture() {
+  const gl = useThree((s) => s.gl)
+  return useMemo(() => {
+    const cell = 32
+    const size = WIN_CELLS * cell
+    const c = document.createElement('canvas')
+    c.width = c.height = size
+    const ctx = c.getContext('2d')
+    ctx.fillStyle = '#000'
+    ctx.fillRect(0, 0, size, size)
+    let seed = 42
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646
+    for (let y = 0; y < WIN_CELLS; y++) {
+      for (let x = 0; x < WIN_CELLS; x++) {
+        if (rnd() > 0.4) continue
+        ctx.fillStyle = rnd() < 0.22 ? '#73d9ff' : '#ffcc73'
+        ctx.fillRect(x * cell + cell * 0.28, y * cell + cell * 0.26, cell * 0.44, cell * 0.44)
+      }
+    }
+    const tex = new THREE.CanvasTexture(c)
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping
+    tex.anisotropy = Math.min(8, gl.capabilities.getMaxAnisotropy())
+    return tex
+  }, [gl])
+}
+
 const cityVertex = `
   attribute float aSeed;
   varying vec2 vUv;
@@ -131,24 +161,21 @@ const cityVertex = `
   }
 `
 const cityFragment = `
+  uniform sampler2D uWin;
   varying vec2 vUv;
   varying vec3 vScale;
   varying vec3 vN;
   varying float vSeed;
   varying float vH;
-  float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   void main() {
     vec3 col = mix(vec3(0.025, 0.03, 0.11), vec3(0.09, 0.11, 0.34), vH);
     if (abs(vN.y) < 0.5) {
       float w = abs(vN.x) > 0.5 ? vScale.z : vScale.x;
-      vec2 g = vUv * vec2(max(1.0, floor(w * 3.0)), floor(vScale.y * 3.2));
-      vec2 c = floor(g);
-      vec2 f = fract(g);
-      float win = step(0.28, f.x) * step(f.x, 0.72) * step(0.3, f.y) * step(f.y, 0.74);
-      float r = hash(c + vSeed + (vN.x + vN.z * 2.0) * 7.0);
-      float on = step(0.6, r);
-      vec3 lc = mix(vec3(1.0, 0.8, 0.45), vec3(0.45, 0.85, 1.0), step(0.78, hash(c * 1.7 + vSeed)));
-      col = mix(col, lc, win * on * 0.95);
+      vec2 cells = vec2(max(1.0, floor(w * 3.0)), floor(vScale.y * 3.2));
+      // whole-cell offset into the window sheet so each face gets its own pattern
+      float face = abs(vN.x) > 0.5 ? (vN.x > 0.0 ? 1.0 : 2.0) : (vN.z > 0.0 ? 3.0 : 4.0);
+      vec2 offset = vec2(vSeed + face * 3.0, vSeed * 7.0 + face * 5.0);
+      col += texture2D(uWin, (vUv * cells + offset) / ${WIN_CELLS}.0).rgb * 0.95;
       // side faces facing away from the moon are darker
       col *= vN.x > 0.5 ? 0.7 : 1.0;
     } else {
@@ -160,14 +187,18 @@ const cityFragment = `
 
 function City({ count = LOW_POWER ? 40 : 55 }) {
   const ref = useRef(null)
+  const windows = useWindowTexture()
   const { geometry, buildings } = useMemo(() => {
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     geometry.translate(0, 0.5, 0)
     const seeds = new Float32Array(count)
     const buildings = []
-    const rand = (a, b) => a + Math.random() * (b - a)
+    // seeded PRNG so the skyline is identical on every load
+    let seed = 7
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646
+    const rand = (a, b) => a + rnd() * (b - a)
     for (let i = 0; i < count; i++) {
-      seeds[i] = Math.random() * 100
+      seeds[i] = Math.floor(rnd() * WIN_CELLS)
       const x = rand(-16, 12)
       const z = rand(-12, -5)
       // taller skyline on the left, lower towards the mountain on the right
@@ -181,10 +212,11 @@ function City({ count = LOW_POWER ? 40 : 55 }) {
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({
+        uniforms: { uWin: { value: windows } },
         vertexShader: cityVertex,
         fragmentShader: cityFragment,
       }),
-    [],
+    [windows],
   )
 
   useLayoutEffect(() => {
