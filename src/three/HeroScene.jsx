@@ -391,6 +391,8 @@ export default function HeroScene() {
       <Canvas
         frameloop={!visible ? 'never' : LOW_POWER ? 'demand' : 'always'}
         dpr={dpr}
+        // measure layout size (offsetWidth), not the GSAP-scaled box, and don't re-measure on scroll
+        resize={{ offsetSize: true, scroll: false }}
         camera={{ position: [0, 0.8, 9], fov: 50 }}
         gl={{ antialias: !LOW_POWER, alpha: true, powerPreference: 'high-performance' }}
         eventSource={document.getElementById('root')}
